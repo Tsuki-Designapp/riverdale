@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vote & Soutien — Riverdale City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt: #080818;
+    --asphalt-2: #080828;
+    --violet-dark: #180838;
+    --violet-deep: #280858;
+    --violet: #380878;
+    --violet-electric: #480878;
+    --concrete: #d9d6e8;
+    --concrete-dim: #8b84a8;
+    --magenta-neon: #9008d8;
+    --violet-neon: #580898;
+    --magenta-violet: #7008b8;
+    --line: rgba(144,8,216,0.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--asphalt);
+    color:var(--concrete);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  h1,h2,h3{
+    font-family:'Anton', sans-serif;font-weight:400;
+    text-transform:uppercase;letter-spacing:0.01em;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(8,8,24,0.9);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px;max-width:1200px;margin:0 auto;gap:20px;
+  }
+  .logo{
+    font-family:'Anton', sans-serif;font-weight:700;
+    font-size:1.25rem;letter-spacing:0.06em;
+    display:flex;align-items:center;gap:10px;flex-shrink:0;
+  }
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--violet-neon);box-shadow:0 0 8px var(--violet-neon);}
+  .nav-links{display:flex;align-items:center;gap:24px;font-size:0.8rem;letter-spacing:0.03em;text-transform:uppercase;}
+  .nav-links > a{color:var(--concrete-dim);transition:color .2s;}
+  .nav-links > a:hover, .nav-links > a.active{color:var(--magenta-neon);}
+  .btn-discord{
+    background:var(--violet-neon);color:var(--asphalt);
+    padding:10px 20px;font-weight:600;font-size:0.85rem;
+    letter-spacing:0.04em;text-transform:uppercase;border-radius:2px;
+    flex-shrink:0;transition:transform .15s, box-shadow .15s;
+  }
+  .btn-discord:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(88,8,152,0.3);}
+
+  .nav-more{position:relative;}
+  .nav-more summary{
+    cursor:pointer;list-style:none;color:var(--concrete-dim);
+    display:flex;align-items:center;gap:4px;
+  }
+  .nav-more summary::-webkit-details-marker{display:none;}
+  .nav-more summary::after{content:"▾";font-size:0.7rem;}
+  .nav-more summary:hover, .nav-more[open] summary{color:var(--magenta-neon);}
+  .nav-more-menu{
+    position:absolute;top:30px;right:0;z-index:60;
+    background:var(--asphalt-2);border:1px solid var(--line);border-radius:4px;
+    padding:8px;min-width:190px;display:flex;flex-direction:column;gap:2px;
+    box-shadow:0 16px 40px rgba(0,0,0,0.55);
+  }
+  .nav-more-menu a{
+    padding:9px 12px;border-radius:2px;font-size:0.78rem;
+    color:var(--concrete-dim);letter-spacing:0.03em;
+  }
+  .nav-more-menu a:hover{background:var(--asphalt);color:var(--magenta-neon);}
+
+  .page-hero{
+    padding:64px 24px 40px;text-align:center;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, var(--asphalt-2) 0%, var(--asphalt) 100%);
+  }
+  .page-hero .eyebrow{
+    display:block;color:var(--magenta-neon);font-family:'IBM Plex Mono',monospace;
+    font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;
+  }
+  .page-hero h1{font-size:2.4rem;color:#fff;}
+  .page-hero p{color:var(--concrete-dim);max-width:56ch;margin:16px auto 0;font-size:1rem;}
+
+  .chapters{
+    display:flex;flex-wrap:wrap;gap:1px;background:var(--line);border:1px solid var(--line);
+    max-width:900px;margin:32px auto 0;
+  }
+  .chapters a{
+    flex:1 1 auto;background:var(--asphalt-2);padding:14px 10px;text-align:center;
+    font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.05em;text-transform:uppercase;
+    color:var(--concrete-dim);
+  }
+  .chapters a:hover{color:var(--concrete);}
+
+  section{padding:56px 24px 88px;}
+  .section-head{margin-bottom:40px;max-width:60ch;}
+  .section-head .eyebrow{
+    color:var(--violet-neon);font-family:'IBM Plex Mono',monospace;
+    font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;
+    display:block;margin-bottom:12px;
+  }
+  .section-head h2{font-size:1.8rem;color:#fff;}
+  .chapter-block{scroll-margin-top:90px;padding-top:40px;}
+  .chapter-block:first-child{padding-top:0;}
+
+  .rules-list{border-top:1px solid var(--line);}
+  .rule{
+    display:grid;grid-template-columns:110px 1fr;gap:24px;
+    padding:26px 0;border-bottom:1px solid var(--line);
+  }
+  .rule .code{font-family:'IBM Plex Mono',monospace;color:var(--magenta-violet);font-size:0.8rem;}
+  .rule h3{font-size:1.05rem;color:#fff;margin-bottom:6px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:600;}
+  .rule p{color:var(--concrete-dim);font-size:0.92rem;}
+
+  .sanc-table{width:100%;border-collapse:collapse;margin-top:8px;}
+  .sanc-table th{
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+    text-transform:uppercase;letter-spacing:0.06em;color:var(--magenta-neon);
+    padding:12px 16px;border-bottom:1px solid var(--line);
+  }
+  .sanc-table td{
+    padding:14px 16px;border-bottom:1px solid var(--line);
+    color:var(--concrete-dim);font-size:0.9rem;
+  }
+  .sanc-table td:first-child{color:var(--concrete);font-weight:500;}
+  .sanc-table tr:hover td{background:var(--asphalt-2);}
+
+  .scale{display:flex;gap:1px;background:var(--line);border:1px solid var(--line);margin:32px 0 48px;flex-wrap:wrap;}
+  .scale div{flex:1 1 18%;background:var(--asphalt-2);padding:20px 12px;text-align:center;}
+  .scale div .n{font-family:'Anton',sans-serif;color:var(--magenta-neon);font-size:1.4rem;display:block;margin-bottom:6px;}
+  .scale div span{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;color:var(--concrete-dim);text-transform:uppercase;}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .card{background:var(--asphalt);padding:32px 28px;}
+  .card .num{font-family:'IBM Plex Mono',monospace;color:var(--magenta-neon);font-size:0.78rem;margin-bottom:16px;display:block;}
+  .card h3{font-size:1.1rem;color:#fff;margin-bottom:10px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:600;}
+  .card p{color:var(--concrete-dim);font-size:0.9rem;}
+  .card ul{color:var(--concrete-dim);font-size:0.88rem;margin-top:10px;padding-left:18px;}
+  .card li{margin-bottom:4px;}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .step{border-left:2px solid var(--line);padding-left:20px;}
+  .step .n{font-family:'Anton',sans-serif;font-size:2rem;-webkit-text-stroke:1.5px var(--violet-neon);color:transparent;margin-bottom:10px;display:block;}
+  .step h3{font-size:0.98rem;color:#fff;margin-bottom:8px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:600;}
+  .step p{color:var(--concrete-dim);font-size:0.88rem;}
+
+  .req-list{border-top:1px solid var(--line);margin-top:8px;}
+  .req-item{
+    display:flex;align-items:flex-start;gap:16px;
+    padding:20px 0;border-bottom:1px solid var(--line);
+  }
+  .req-item .check{
+    width:22px;height:22px;flex-shrink:0;border-radius:50%;
+    background:var(--asphalt-2);border:1px solid var(--magenta-neon);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--magenta-neon);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;
+    margin-top:2px;
+  }
+  .req-item h3{font-size:1rem;color:#fff;margin-bottom:4px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:600;}
+  .req-item p{color:var(--concrete-dim);font-size:0.9rem;}
+
+  .cta{
+    background:var(--asphalt-2);border:1px solid var(--line);border-radius:4px;
+    padding:48px;text-align:center;max-width:960px;margin:0 auto;
+  }
+  .cta h2{color:#fff;font-size:1.7rem;margin-bottom:14px;}
+  .cta p{color:var(--concrete-dim);margin-bottom:24px;}
+  .btn-primary{
+    background:var(--magenta-neon);color:var(--asphalt);
+    padding:14px 28px;font-weight:600;font-size:0.9rem;
+    letter-spacing:0.04em;text-transform:uppercase;border-radius:2px;
+    display:inline-block;transition:transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(144,8,216,0.3);}
+  .btn-ghost{
+    border:1px solid var(--line);color:var(--concrete);
+    padding:14px 28px;font-weight:500;font-size:0.9rem;
+    letter-spacing:0.04em;text-transform:uppercase;border-radius:2px;
+    display:inline-block;margin-left:12px;
+  }
+  .btn-ghost:hover{border-color:var(--concrete-dim);}
+
+  .vote-card, .partner-card, .streamer-card{
+    background:var(--asphalt-2);border:1px solid var(--line);border-radius:4px;
+    padding:28px;text-align:center;
+  }
+  .vote-card .n, .partner-card .avatar, .streamer-card .avatar{
+    width:56px;height:56px;border-radius:50%;
+    background:linear-gradient(135deg, var(--violet-neon), var(--magenta-neon));
+    margin:0 auto 16px;display:flex;align-items:center;justify-content:center;
+    font-family:'Anton',sans-serif;color:#fff;font-size:1.3rem;
+  }
+  .vote-card h3, .partner-card h3, .streamer-card h3{font-size:1.05rem;color:#fff;margin-bottom:8px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:600;}
+  .vote-card p, .partner-card p, .streamer-card p{color:var(--concrete-dim);font-size:0.88rem;margin-bottom:16px;}
+  .streamer-card .platform{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+    color:var(--violet-neon);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;
+  }
+
+  .tier{
+    background:var(--asphalt);border:1px solid var(--line);
+    padding:28px;
+  }
+  .tier h3{color:#fff;font-size:1.1rem;margin-bottom:6px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:700;}
+  .tier .price{font-family:'IBM Plex Mono',monospace;color:var(--magenta-neon);font-size:0.85rem;margin-bottom:16px;display:block;}
+  .tier ul{color:var(--concrete-dim);font-size:0.88rem;padding-left:18px;}
+  .tier li{margin-bottom:6px;}
+
+  .status-box{
+    background:var(--asphalt-2);border:1px solid var(--line);border-radius:4px;
+    padding:24px;display:flex;align-items:center;gap:16px;margin-bottom:32px;
+  }
+  .status-box .dotlive{width:10px;height:10px;border-radius:50%;background:#2ecc71;box-shadow:0 0 8px #2ecc71;flex-shrink:0;}
+  .status-box p{color:var(--concrete-dim);font-size:0.9rem;}
+  .status-box a{color:var(--violet-neon);}
+
+  .opt-list{border-top:1px solid var(--line);margin-top:8px;}
+  .opt-item{padding:20px 0;border-bottom:1px solid var(--line);}
+  .opt-item h3{font-size:1rem;color:#fff;margin-bottom:6px;text-transform:none;font-family:'IBM Plex Sans',sans-serif;font-weight:600;}
+  .opt-item p{color:var(--concrete-dim);font-size:0.9rem;}
+
+  footer{
+    border-top:1px solid var(--line);padding:32px 24px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--concrete-dim);
+    max-width:1100px;margin:0 auto;
+  }
+
+  @media(max-width:840px){
+    .nav-links{display:none;}
+    .chapters{flex-wrap:wrap;}
+    .rule{grid-template-columns:60px 1fr;}
+    .grid-3, .grid-2, .steps{grid-template-columns:1fr;}
+    .sanc-table{font-size:0.82rem;}
+    .scale div{flex:1 1 45%;}
+    footer{flex-direction:column;gap:8px;text-align:center;}
+  }
+  :focus-visible{outline:2px solid var(--violet-neon);outline-offset:2px;}
+</style>
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html" class="logo"><span class="dot"></span>RIVERDALE CITY</a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="reglement.html">Règlement</a>
+      <a href="staff.html">Staff</a>
+      <a href="prerequis.html">Prérequis</a>
+      <a href="discord.html">Discord</a>
+      <details class="nav-more" open>
+        <summary>Plus</summary>
+        <div class="nav-more-menu">
+        <a href="webrp.html">Web RP</a>
+        <a href="vote.html" class="active">Vote / Soutien</a>
+        <a href="streamers.html">Streamers</a>
+        <a href="support.html">Support</a>
+        </div>
+      </details>
+    </div>
+    <a class="btn-discord" href="#" target="_blank" rel="noopener">Rejoindre le Discord</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <span class="eyebrow">Aide-nous à grandir</span>
+  <h1>Vote & Soutien</h1>
+  <p>Deux façons simples de soutenir Riverdale City, gratuite ou non — chacune aide le serveur à sa manière.</p>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Gratuit</span>
+      <h2>Voter pour le serveur</h2>
+    </div>
+    <p style="color:var(--concrete-dim);max-width:70ch;margin-bottom:32px;">Chaque vote sur les sites de classement de serveurs FiveM améliore notre visibilité et nous aide à faire connaître Riverdale City. En échange, une récompense en argent RP est offerte chaque jour à ceux qui votent.</p>
+    <div class="grid-3">
+      <div class="vote-card"><div class="n">01</div><h3>Serveur-list A</h3><p>Vote quotidien, récompense automatique en jeu.</p><a class="btn-ghost" href="#" target="_blank" rel="noopener">Voter</a></div>
+      <div class="vote-card"><div class="n">02</div><h3>Serveur-list B</h3><p>Vote quotidien, récompense automatique en jeu.</p><a class="btn-ghost" href="#" target="_blank" rel="noopener">Voter</a></div>
+      <div class="vote-card"><div class="n">03</div><h3>Serveur-list C</h3><p>Vote quotidien, récompense automatique en jeu.</p><a class="btn-ghost" href="#" target="_blank" rel="noopener">Voter</a></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Optionnel</span>
+      <h2>Soutenir Riverdale City</h2>
+    </div>
+    <p style="color:var(--concrete-dim);max-width:70ch;margin-bottom:32px;">Le serveur reste gratuit et accessible à tous. Le soutien financier est facultatif et sert uniquement à couvrir les frais d'hébergement — aucun avantage en jeu n'affecte l'équilibre du roleplay : uniquement du cosmétique.</p>
+    <div class="grid-3">
+      <div class="tier">
+        <h3>Bronze</h3>
+        <span class="price mono">à partir de 3€/mois</span>
+        <ul>
+          <li>Rôle Discord dédié</li>
+          <li>Accès à un salon exclusif</li>
+          <li>Nom affiché dans les remerciements</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <h3>Argent</h3>
+        <span class="price mono">à partir de 7€/mois</span>
+        <ul>
+          <li>Tous les avantages Bronze</li>
+          <li>Tenues cosmétiques exclusives</li>
+          <li>Accès prioritaire aux events</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <h3>Or</h3>
+        <span class="price mono">à partir de 12€/mois</span>
+        <ul>
+          <li>Tous les avantages Argent</li>
+          <li>Plaque d'immatriculation personnalisée</li>
+          <li>Accès à un véhicule cosmétique exclusif</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Merci pour ton soutien</h2>
+      <p>Retrouve tous les détails et la boutique sur le Discord officiel.</p>
+      <a class="btn-primary" href="#" target="_blank" rel="noopener">Voir la boutique</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>RIVERDALE CITY — serveur communautaire, non affilié à Rockstar Games</span>
+  <span>FiveM · Riverdale City</span>
+</footer>
+
+</body>
+</html>
